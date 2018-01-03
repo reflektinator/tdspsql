@@ -1,0 +1,22 @@
+Under Debian you need at least:
+ build-essential
+ bison
+ flex
+ libicu-dev
+ libgmp-dev
+
+"make" from the root directory should build tdspsql.so. Copy this somewhere useful (or leave it there if you want)
+
+update postgresql.conf to include the line:
+shared_preload_libraries = '"/path/to/tdspsql.so"'
+
+Restart postgres
+
+Create a new database mssqlserver (this is the name of the default MSSQL instance. Other instances are not supported at this time)
+
+Create a new user sa with full access into the mssqlserver database
+
+Open SQL Server Management Studio and create a new SQL Query and connect to the IP address of your postgres server (Object Explorer won't work - too many internal dependencies). Run some queries.
+
+Ironically, this doesn't actually work with tsql from freetds, probably due to some assumptions about protocol versions. This will be fixed at some point as tsql will be a good way to do regression testing.
+
