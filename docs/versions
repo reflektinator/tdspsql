@@ -1,0 +1,195 @@
+TDS versions:
+
+7.1 - 2000
+  8.00.760 (sp3)
+  loginack
+    tds version 0x71000001
+    server version 0x080002f8
+
+7.2 - 2005
+  9.00.5069.00 (sp4)
+  loginack
+    tds version 0x7209002
+    server version 0x090013cd
+
+char(10)
+7.1 header
+ 00 00 user type
+ 01 00 flags
+ af    type
+ 0a 00 length
+ 09 04 codepage
+ d0 00 flags
+ 00    charset id
+ 03    heading length in chars
+ xx xx heading in ucs2
+7.1 data
+ 0a 00 length (= header length)
+ xx xx data (padded to length)
+7.2 header
+ same as 7.1 header except
+   user type is 32 bits
+   flags 21 00
+7.2 data
+ same as 7.1 data
+  
+varchar
+7.1 header
+ same as char(10) but type a7
+7.1 data
+ 03 00 length (= actual length)
+ xx xx data (no padding)
+7.2 header
+ same as char(10) but type a7
+7.2 data
+ same as 7.1 data
+
+varchar(max)
+7.1 not supported
+7.2 header
+  same as varchar but length ff ff
+7.2 data
+  03 00 00 00 length(?)
+  00 00 00 00 ?
+  03 00 00 00 length(?)
+  xx xx xx data
+  00 00 00 00 ?
+
+  
+text
+7.1 header
+ 00 00 user type
+ 01 00 flags
+ 23    type
+ ff ff ff 7f length(?)
+ 09 04 codepage
+ d0 00 flags
+ 00    charset id
+ 03    heading length in chars
+ xx xx heading in ucs2
+ 10    length(?)
+ xx xx "dummy textptr" in ascii
+ 00 00 00 (?)
+ xx xx "dymmyTS" in ascii
+ 00    terminator(?
+7.1 data
+ 03 00 00 00 length(?)
+ xx xx actual data
+7.2 header
+ same as 7.1 text but flags is 32 bits
+7.2 data
+ same as 7.1 data
+
+nchar
+7.1 header
+ same as char but type ef and length is bytes not chars
+7.1 data
+ same as char but length in bytes and data in ucs2
+
+nvarchar
+7.1 header
+ same as nchar but type e7 and length is bytes not chars
+7.1 data
+ same as nchar but length in bytes and data in ucs2
+
+nvarchar(max)
+7.1 not supported
+
+ntext
+7.1 header
+ same as text but type 63 and length is bytes not chars
+7.1 data
+ same as text but length in bytes and data in ucs2
+
+varbinary
+7.1 header
+ 00 00 user type
+ 01 00 flags
+ a5    type
+ 0a 00 length
+ 03    heading length in chars
+ xx xx heading in ucs2
+7.1 data
+ same as varchar
+
+varbinary(max)
+7.1 not supported
+
+image
+7.1 header
+ 00 00 user type
+ 01 00 flags
+ 34    type
+ ff ff ff 7f length(?)
+ 00 00 (?)
+ 03    heading length in chars
+ xx xx heading in ucs2
+7.1 data
+ 10    length(?)
+ xx xx "dummy textptr" in ascii
+ 00 00 00 (?)
+ xx xx "dymmyTS" in ascii
+ 00    terminator(?
+ 03 00 00 00 length(?)
+ xx xx actual data
+
+bit
+7.1 header
+ 00 00 user type
+ 01 00 flags
+ 68    type
+ 01    length
+ 03    heading length in chars
+ xx xx heading in ucs2
+7.1 data
+ 01    length
+ xx    int8 value
+
+tinyint
+7.1 header
+ 00 00 user type
+ 01 00 flags
+       0001 = nullable(?)
+ 26    type
+ 01    length
+ 03    heading length in chars
+ xx xx heading in ucs2
+7.1 data
+ 01    length
+ xx    int8 value
+
+smallint
+7.1 header
+ same as tinyint but size 2
+7.1 data
+ 02 length
+ xx xx int16 value
+
+int
+7.1 header
+ same as tinyint but size 4
+7.1 data
+ 04 length
+ xx xx xx xx int32 value
+
+bigint
+7.1 header
+ same as tinyint but size 8
+7.1 data
+ 08 length
+ xx xx xx xx xx xx xx xx int64 value
+
+real
+7.1 header
+ same as tinyint but type 6d and size 4
+7.1 data
+ same as int
+ 
+float
+7.1 header
+ same as real but size 8
+7.1 data
+ same as bigint
+
+decimal
+numeric

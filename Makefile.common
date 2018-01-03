@@ -1,0 +1,10 @@
+.SUFFIXES:
+
+CC := gcc
+CXX := g++
+LEX := flex
+YACC := bison
+LD := ld
+
+CFLAGS := -Wall -g -I/usr/include/postgresql/9.6/server -fpic
+CXXFLAGS := -Wall -std=c++11 -g -I/usr/include/postgresql/9.6/server -fpic

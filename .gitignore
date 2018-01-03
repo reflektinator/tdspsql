@@ -1,0 +1,10 @@
+*.o
+*.l.cc
+*.l.h
+*.y.cc
+*.y.h
+*.t.c
+*.t.sql
+*.so
+tdspsql
+core
